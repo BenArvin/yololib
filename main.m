@@ -27,6 +27,7 @@
 
 
 NSString* DYLIB_PATH;
+NSString* DYLIB_NAME;
 
 #define DYLIB_CURRENT_VER 0x10000
 #define DYLIB_COMPATIBILITY_VERSION 0x10000
@@ -50,6 +51,20 @@ void inject_dylib(FILE* newFile, uint32_t top) {
     
     fread(&mach, sizeof(struct mach_header), 1, newFile);
     
+    char *buffer = (char *)malloc(mach.sizeofcmds);
+    fread(buffer, mach.sizeofcmds, 1, newFile);
+    struct dylib_command *p = (struct dylib_command *)buffer;
+    for (uint32_t i = 0; i < mach.ncmds; i++, p = (struct dylib_command *)((char *)p + p->cmdsize)) {
+        if (p->cmd == LC_LOAD_DYLIB || p->cmd == LC_LOAD_WEAK_DYLIB) {
+            char *name = (char *)p + p->dylib.name.offset;
+            NSString *nameStr = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+            if ([nameStr rangeOfString:DYLIB_NAME].location != NSNotFound) {
+                NSLog(@"Injected already!");
+                return;
+            }
+        }
+    }
+    
     NSData* data = [DYLIB_PATH dataUsingEncoding:NSUTF8StringEncoding];
     
     uint32_t dylib_size = (uint32_t)[data length] + sizeof(struct dylib_command);
@@ -59,7 +74,7 @@ void inject_dylib(FILE* newFile, uint32_t top) {
     uint32_t sizeofcmds = mach.sizeofcmds;
     mach.sizeofcmds += dylib_size;
     
-    fseek(newFile, -sizeof(struct mach_header), SEEK_CUR);
+    fseek(newFile, top, SEEK_SET);
     fwrite(&mach, sizeof(struct mach_header), 1, newFile);
     NSLog(@"Patching mach_header..\n");
     
@@ -92,6 +107,20 @@ void inject_dylib_64(FILE* newFile, uint32_t top) {
         
         fread(&mach, sizeof(struct mach_header_64), 1, newFile);
         
+        char *buffer = (char *)malloc(mach.sizeofcmds);
+        fread(buffer, mach.sizeofcmds, 1, newFile);
+        struct dylib_command *p = (struct dylib_command *)buffer;
+        for (uint32_t i = 0; i < mach.ncmds; i++, p = (struct dylib_command *)((char *)p + p->cmdsize)) {
+            if (p->cmd == LC_LOAD_DYLIB || p->cmd == LC_LOAD_WEAK_DYLIB) {
+                char *name = (char *)p + p->dylib.name.offset;
+                NSString *nameStr = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+                if ([nameStr rangeOfString:DYLIB_NAME].location != NSNotFound) {
+                    NSLog(@"Injected already for 64!");
+                    return;
+                }
+            }
+        }
+        
         NSData* data = [DYLIB_PATH dataUsingEncoding:NSUTF8StringEncoding];
         
         
@@ -115,7 +144,7 @@ void inject_dylib_64(FILE* newFile, uint32_t top) {
         uint32_t sizeofcmds = mach.sizeofcmds;
         mach.sizeofcmds += (dylib_size);
         
-        fseek(newFile, -sizeof(struct mach_header_64), SEEK_CUR);
+        fseek(newFile, top, SEEK_SET);
         fwrite(&mach, sizeof(struct mach_header_64), 1, newFile);
         NSLog(@"Patching mach_header..\n");
         
@@ -207,7 +236,10 @@ int main(int argc, const char * argv[])
     NSString* binary = [NSString stringWithUTF8String:argv[1]];
     NSString* dylib = [NSString stringWithUTF8String:argv[2]];
     DYLIB_PATH = [NSString stringWithFormat:@"@executable_path/%@", dylib];
+    DYLIB_NAME = [DYLIB_PATH stringByReplacingOccurrencesOfString:@"@executable_path/Frameworks/" withString:@""];
+    DYLIB_NAME = [DYLIB_NAME stringByReplacingOccurrencesOfString:@"@rpath/" withString:@""];
     NSLog(@"dylib path %@", DYLIB_PATH);
+    NSLog(@"dylib name %@", DYLIB_NAME);
     
     inject_file(binary, DYLIB_PATH);
     

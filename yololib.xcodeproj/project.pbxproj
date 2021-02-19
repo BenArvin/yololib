@@ -24,7 +24,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AD49F4E51769B63A00B8D2E0 /* yololib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = yololib; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD49F4E51769B63A00B8D2E0 /* yololib_ba */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = yololib_ba; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD4A0D561949A42E00B6B127 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		AD4A0D581949AA5B00B6B127 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -53,7 +53,7 @@
 		AD49F4E61769B63A00B8D2E0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AD49F4E51769B63A00B8D2E0 /* yololib */,
+				AD49F4E51769B63A00B8D2E0 /* yololib_ba */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,9 +61,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AD49F4E41769B63900B8D2E0 /* yololib */ = {
+		AD49F4E41769B63900B8D2E0 /* yololib_ba */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AD49F4EE1769B63A00B8D2E0 /* Build configuration list for PBXNativeTarget "yololib" */;
+			buildConfigurationList = AD49F4EE1769B63A00B8D2E0 /* Build configuration list for PBXNativeTarget "yololib_ba" */;
 			buildPhases = (
 				AD49F4E11769B63900B8D2E0 /* Sources */,
 				AD49F4E21769B63900B8D2E0 /* Frameworks */,
@@ -73,9 +73,9 @@
 			);
 			dependencies = (
 			);
-			name = yololib;
+			name = yololib_ba;
 			productName = yololib;
-			productReference = AD49F4E51769B63A00B8D2E0 /* yololib */;
+			productReference = AD49F4E51769B63A00B8D2E0 /* yololib_ba */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -92,6 +92,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = AD49F4DC1769B63800B8D2E0;
@@ -99,7 +100,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AD49F4E41769B63900B8D2E0 /* yololib */,
+				AD49F4E41769B63900B8D2E0 /* yololib_ba */,
 			);
 		};
 /* End PBXProject section */
@@ -203,7 +204,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AD49F4EE1769B63A00B8D2E0 /* Build configuration list for PBXNativeTarget "yololib" */ = {
+		AD49F4EE1769B63A00B8D2E0 /* Build configuration list for PBXNativeTarget "yololib_ba" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AD49F4EF1769B63A00B8D2E0 /* Debug */,
